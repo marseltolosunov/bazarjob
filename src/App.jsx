@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard'
 import BecomePro from './pages/BecomePro'
 import About from './pages/About'
 import NotFound from './pages/NotFound'
+import Category from './pages/Category'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/category/:id" element={<Category />} />
         <Route path="/pro/:id" element={<ProProfile />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/become-pro" element={<BecomePro />} />
