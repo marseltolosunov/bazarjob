@@ -20,11 +20,12 @@ export default function Navbar() {
           Bazar<span className="text-accent">Job</span>
         </div>
 
-        <ul className="hidden md:flex gap-8 list-none">
-          <li><a href="#categories" className="text-[#6b64a0] font-medium hover:text-primary transition-colors">Категории</a></li>
-          <li><a href="#how" className="text-[#6b64a0] font-medium hover:text-primary transition-colors">Как работает</a></li>
-          <li><a href="#pros" className="text-[#6b64a0] font-medium hover:text-primary transition-colors">Специалисты</a></li>
-        </ul>
+<ul className="hidden md:flex gap-8 list-none">
+  <li><a href="/#categories" className="text-[#6b64a0] font-medium hover:text-primary transition-colors">Категории</a></li>
+  <li><a href="/#how" className="text-[#6b64a0] font-medium hover:text-primary transition-colors">Как работает</a></li>
+  <li><span onClick={() => navigate('/about')} className="text-[#6b64a0] font-medium hover:text-primary transition-colors cursor-pointer">О нас</span></li>
+  <li><span onClick={() => navigate('/become-pro')} className="text-[#6b64a0] font-medium hover:text-primary transition-colors cursor-pointer">Стать мастером</span></li>
+</ul>
 
         <div className="flex gap-3">
           <button
