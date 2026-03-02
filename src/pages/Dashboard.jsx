@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
-import { Star, Clock, CheckCircle, XCircle, ChevronRight, User, Settings, LogOut, Bell, Briefcase } from 'lucide-react'
+import { Star, Clock, CheckCircle, XCircle, ChevronRight, User, Settings, LogOut, Bell, Briefcase, Menu, X } from 'lucide-react'
 
 const clientOrders = [
   { id: 1, pro: 'Алмаз Токтосунов', job: 'Сантехник', avatar: '👨‍🔧', date: '28 февраля 2025', status: 'active', price: '2 500 сом', desc: 'Починить кран на кухне' },
@@ -25,31 +25,65 @@ const statusConfig = {
 
 export default function Dashboard() {
   const navigate = useNavigate()
-  const [role, setRole] = useState('client') // 'client' or 'pro'
+  const [role, setRole] = useState('client')
   const [activePage, setActivePage] = useState('orders')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const menuItems = [
-    { id: 'orders',  icon: Briefcase, label: role === 'client' ? 'Мои заказы' : 'Заказы' },
-    { id: 'profile', icon: User,      label: 'Профиль' },
-    { id: 'notifications', icon: Bell, label: 'Уведомления' },
-    { id: 'settings', icon: Settings, label: 'Настройки' },
+    { id: 'orders',        icon: Briefcase, label: role === 'client' ? 'Мои заказы' : 'Заказы' },
+    { id: 'profile',       icon: User,      label: 'Профиль' },
+    { id: 'notifications', icon: Bell,      label: 'Уведомления' },
+    { id: 'settings',      icon: Settings,  label: 'Настройки' },
   ]
+
+  const SidebarContent = () => (
+    <div className="bg-white rounded-2xl border border-[#e2deff] overflow-hidden">
+      <div className="bg-gradient-to-br from-primary to-primary-light p-6 text-white text-center">
+        <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center text-3xl mx-auto mb-3">
+          {role === 'client' ? '👤' : '👨‍🔧'}
+        </div>
+        <div className="font-syne font-bold text-lg">{role === 'client' ? 'Марсель А.' : 'Алмаз Токтосунов'}</div>
+        <div className="text-white/70 text-sm mt-0.5">{role === 'client' ? 'Клиент' : 'Сантехник • ★ 4.9'}</div>
+      </div>
+      <div className="p-3">
+        {menuItems.map(item => (
+          <button
+            key={item.id}
+            onClick={() => { setActivePage(item.id); setSidebarOpen(false) }}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${activePage === item.id ? 'bg-primary text-white' : 'text-[#6b64a0] hover:bg-[#f4f3ff] hover:text-primary'}`}
+          >
+            <item.icon size={17} />
+            {item.label}
+            {activePage !== item.id && <ChevronRight size={14} className="ml-auto opacity-40" />}
+          </button>
+        ))}
+        <div className="border-t border-[#e2deff] mt-2 pt-2">
+          <button
+            onClick={() => navigate('/')}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-50 transition-all"
+          >
+            <LogOut size={17} /> Выйти
+          </button>
+        </div>
+      </div>
+    </div>
+  )
 
   return (
     <div className="min-h-screen bg-[#f4f3ff]">
       <Navbar />
 
-      <div className="max-w-6xl mx-auto px-6 pt-28 pb-16">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16">
 
-        {/* ROLE SWITCHER — только для демо */}
-        <div className="flex items-center gap-3 mb-6 bg-white border border-[#e2deff] rounded-2xl p-4">
-          <span className="text-sm text-[#6b64a0] font-medium">Режим просмотра (демо):</span>
+        {/* ROLE SWITCHER */}
+        <div className="flex items-center gap-3 mb-5 bg-white border border-[#e2deff] rounded-2xl p-3 md:p-4 flex-wrap">
+          <span className="text-sm text-[#6b64a0] font-medium">Режим (демо):</span>
           <div className="flex bg-[#f4f3ff] rounded-xl p-1">
             {[{key:'client',label:'Клиент'},{key:'pro',label:'Мастер'}].map(r => (
               <button
                 key={r.key}
                 onClick={() => setRole(r.key)}
-                className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all ${role === r.key ? 'bg-primary text-white' : 'text-[#6b64a0]'}`}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${role === r.key ? 'bg-primary text-white' : 'text-[#6b64a0]'}`}
               >
                 {r.label}
               </button>
@@ -57,50 +91,27 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-4 gap-6">
+        {/* MOBILE SIDEBAR TOGGLE */}
+        <button
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="lg:hidden flex items-center gap-2 mb-4 px-4 py-2.5 bg-white border border-[#e2deff] rounded-xl text-sm font-semibold text-[#6b64a0] w-full"
+        >
+          {sidebarOpen ? <X size={16} /> : <Menu size={16} />}
+          {menuItems.find(m => m.id === activePage)?.label}
+        </button>
 
-          {/* SIDEBAR */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl border border-[#e2deff] overflow-hidden">
+        {/* MOBILE SIDEBAR */}
+        {sidebarOpen && (
+          <div className="lg:hidden mb-4">
+            <SidebarContent />
+          </div>
+        )}
 
-              {/* USER INFO */}
-              <div className="bg-gradient-to-br from-primary to-primary-light p-6 text-white text-center">
-                <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-3xl mx-auto mb-3">
-                  {role === 'client' ? '👤' : '👨‍🔧'}
-                </div>
-                <div className="font-syne font-bold text-lg">
-                  {role === 'client' ? 'Марсель А.' : 'Алмаз Токтосунов'}
-                </div>
-                <div className="text-white/70 text-sm mt-0.5">
-                  {role === 'client' ? 'Клиент' : 'Сантехник • ★ 4.9'}
-                </div>
-              </div>
+        <div className="grid lg:grid-cols-4 gap-5">
 
-              {/* MENU */}
-              <div className="p-3">
-                {menuItems.map(item => (
-                  <button
-                    key={item.id}
-                    onClick={() => setActivePage(item.id)}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${activePage === item.id ? 'bg-primary text-white' : 'text-[#6b64a0] hover:bg-[#f4f3ff] hover:text-primary'}`}
-                  >
-                    <item.icon size={17} />
-                    {item.label}
-                    {activePage !== item.id && <ChevronRight size={14} className="ml-auto opacity-40" />}
-                  </button>
-                ))}
-                <div className="border-t border-[#e2deff] mt-2 pt-2">
-                  <button
-                    onClick={() => navigate('/')}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-50 transition-all"
-                  >
-                    <LogOut size={17} /> Выйти
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* STATS — только для мастера */}
+          {/* DESKTOP SIDEBAR */}
+          <div className="hidden lg:block lg:col-span-1">
+            <SidebarContent />
             {role === 'pro' && (
               <div className="bg-white rounded-2xl border border-[#e2deff] p-5 mt-4">
                 <div className="font-syne font-bold text-sm mb-4">Статистика</div>
@@ -121,34 +132,30 @@ export default function Dashboard() {
           {/* MAIN CONTENT */}
           <div className="lg:col-span-3">
 
-            {/* ORDERS PAGE */}
             {activePage === 'orders' && (
               <div>
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="font-syne text-2xl font-extrabold">
+                <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
+                  <h2 className="font-syne text-xl md:text-2xl font-extrabold">
                     {role === 'client' ? 'Мои заказы' : 'Входящие заказы'}
                   </h2>
                   {role === 'client' && (
-                    <button
-                      onClick={() => navigate('/search')}
-                      className="px-5 py-2.5 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-primary-light transition-all"
-                    >
+                    <button onClick={() => navigate('/search')} className="px-4 py-2.5 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-primary-light transition-all">
                       + Новый заказ
                     </button>
                   )}
                 </div>
 
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3">
                   {(role === 'client' ? clientOrders : proOrders).map(order => (
-                    <div key={order.id} className="bg-white border border-[#e2deff] rounded-2xl p-6 hover:shadow-lg hover:shadow-primary/8 transition-all">
-                      <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-light to-primary-dark flex items-center justify-center text-2xl shrink-0">
-                          {role === 'client' ? order.avatar : order.avatar}
+                    <div key={order.id} className="bg-white border border-[#e2deff] rounded-2xl p-4 md:p-6">
+                      <div className="flex items-start gap-3 md:gap-4">
+                        <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary-light to-primary-dark flex items-center justify-center text-xl shrink-0">
+                          {order.avatar}
                         </div>
-                        <div className="flex-1">
-                          <div className="flex items-start justify-between gap-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between gap-2 flex-wrap">
                             <div>
-                              <div className="font-syne font-bold">
+                              <div className="font-syne font-bold text-sm md:text-base">
                                 {role === 'client' ? order.pro : order.client}
                               </div>
                               <div className="text-xs text-primary font-semibold mt-0.5">
@@ -162,39 +169,38 @@ export default function Dashboard() {
 
                           <p className="text-sm text-[#6b64a0] mt-2">{order.desc}</p>
 
-                          <div className="flex items-center justify-between mt-3">
-                            <div className="flex items-center gap-4 text-xs text-[#6b64a0]">
-                              <span className="flex items-center gap-1"><Clock size={12} />{order.date}</span>
+                          <div className="flex items-center justify-between mt-3 flex-wrap gap-2">
+                            <div className="flex items-center gap-3 text-xs text-[#6b64a0] flex-wrap">
+                              <span className="flex items-center gap-1"><Clock size={11} />{order.date}</span>
                               <span className="font-syne font-bold text-primary text-sm">{order.price}</span>
                             </div>
 
-                            {/* ACTIONS */}
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 flex-wrap">
                               {order.status === 'active' && (
                                 <>
                                   {role === 'pro' && (
-                                    <button className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 text-green-600 rounded-lg text-xs font-semibold hover:bg-green-100 transition-all">
-                                      <CheckCircle size={13} /> Завершить
+                                    <button className="flex items-center gap-1 px-3 py-1.5 bg-green-50 text-green-600 rounded-lg text-xs font-semibold hover:bg-green-100 transition-all">
+                                      <CheckCircle size={12} /> Завершить
                                     </button>
                                   )}
-                                  <button className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-500 rounded-lg text-xs font-semibold hover:bg-red-100 transition-all">
-                                    <XCircle size={13} /> Отменить
+                                  <button className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-500 rounded-lg text-xs font-semibold hover:bg-red-100 transition-all">
+                                    <XCircle size={12} /> Отменить
                                   </button>
                                 </>
                               )}
                               {order.status === 'pending' && role === 'pro' && (
                                 <>
-                                  <button className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-semibold hover:bg-primary-light transition-all">
-                                    <CheckCircle size={13} /> Принять
+                                  <button className="flex items-center gap-1 px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-semibold hover:bg-primary-light transition-all">
+                                    <CheckCircle size={12} /> Принять
                                   </button>
-                                  <button className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-500 rounded-lg text-xs font-semibold hover:bg-red-100 transition-all">
-                                    <XCircle size={13} /> Отклонить
+                                  <button className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-500 rounded-lg text-xs font-semibold hover:bg-red-100 transition-all">
+                                    <XCircle size={12} /> Отклонить
                                   </button>
                                 </>
                               )}
                               {order.status === 'done' && role === 'client' && (
-                                <button className="flex items-center gap-1.5 px-3 py-1.5 bg-accent/10 text-accent rounded-lg text-xs font-semibold hover:bg-accent/20 transition-all">
-                                  <Star size={13} /> Оставить отзыв
+                                <button className="flex items-center gap-1 px-3 py-1.5 bg-accent/10 text-accent rounded-lg text-xs font-semibold hover:bg-accent/20 transition-all">
+                                  <Star size={12} /> Отзыв
                                 </button>
                               )}
                             </div>
@@ -207,12 +213,11 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* PROFILE PAGE */}
             {activePage === 'profile' && (
               <div>
-                <h2 className="font-syne text-2xl font-extrabold mb-6">Мой профиль</h2>
-                <div className="bg-white rounded-2xl border border-[#e2deff] p-8">
-                  <div className="grid md:grid-cols-2 gap-5">
+                <h2 className="font-syne text-xl md:text-2xl font-extrabold mb-5">Мой профиль</h2>
+                <div className="bg-white rounded-2xl border border-[#e2deff] p-5 md:p-8">
+                  <div className="grid sm:grid-cols-2 gap-4">
                     {[
                       { label: 'Имя', value: role === 'client' ? 'Марсель' : 'Алмаз', type: 'text' },
                       { label: 'Фамилия', value: role === 'client' ? 'Акматов' : 'Токтосунов', type: 'text' },
@@ -222,26 +227,21 @@ export default function Dashboard() {
                       { label: role === 'pro' ? 'Специализация' : 'О себе', value: role === 'pro' ? 'Сантехник' : '', type: 'text' },
                     ].map(f => (
                       <div key={f.label}>
-                        <label className="text-xs font-bold mb-1.5 block text-[#0f0a2e]">{f.label}</label>
-                        <input
-                          type={f.type}
-                          defaultValue={f.value}
-                          className="w-full px-4 py-3 border-2 border-[#e2deff] rounded-xl text-sm outline-none focus:border-primary transition-colors"
-                        />
+                        <label className="text-xs font-bold mb-1.5 block">{f.label}</label>
+                        <input type={f.type} defaultValue={f.value} className="w-full px-4 py-3 border-2 border-[#e2deff] rounded-xl text-sm outline-none focus:border-primary transition-colors" />
                       </div>
                     ))}
                   </div>
-                  <button className="mt-6 px-8 py-3 bg-primary text-white rounded-xl font-syne font-bold hover:bg-primary-light transition-all">
-                    Сохранить изменения
+                  <button className="mt-5 px-8 py-3 bg-primary text-white rounded-xl font-syne font-bold hover:bg-primary-light transition-all">
+                    Сохранить
                   </button>
                 </div>
               </div>
             )}
 
-            {/* NOTIFICATIONS */}
             {activePage === 'notifications' && (
               <div>
-                <h2 className="font-syne text-2xl font-extrabold mb-6">Уведомления</h2>
+                <h2 className="font-syne text-xl md:text-2xl font-extrabold mb-5">Уведомления</h2>
                 <div className="flex flex-col gap-3">
                   {[
                     { icon: '✅', text: 'Алмаз Токтосунов принял вашу заявку', time: '2 часа назад', unread: true },
@@ -249,8 +249,8 @@ export default function Dashboard() {
                     { icon: '📩', text: 'Новое сообщение от Гули Сапаровой', time: '2 дня назад', unread: false },
                     { icon: '🎉', text: 'Ваш профиль верифицирован!', time: '5 дней назад', unread: false },
                   ].map((n, i) => (
-                    <div key={i} className={`bg-white border rounded-2xl p-5 flex items-start gap-4 transition-all ${n.unread ? 'border-primary/30 shadow-sm shadow-primary/10' : 'border-[#e2deff]'}`}>
-                      <div className="w-10 h-10 rounded-xl bg-[#f4f3ff] flex items-center justify-center text-xl shrink-0">{n.icon}</div>
+                    <div key={i} className={`bg-white border rounded-2xl p-4 flex items-start gap-3 ${n.unread ? 'border-primary/30' : 'border-[#e2deff]'}`}>
+                      <div className="w-9 h-9 rounded-xl bg-[#f4f3ff] flex items-center justify-center text-lg shrink-0">{n.icon}</div>
                       <div className="flex-1">
                         <div className="text-sm font-medium">{n.text}</div>
                         <div className="text-xs text-[#6b64a0] mt-1">{n.time}</div>
@@ -262,10 +262,9 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* SETTINGS */}
             {activePage === 'settings' && (
               <div>
-                <h2 className="font-syne text-2xl font-extrabold mb-6">Настройки</h2>
+                <h2 className="font-syne text-xl md:text-2xl font-extrabold mb-5">Настройки</h2>
                 <div className="bg-white rounded-2xl border border-[#e2deff] divide-y divide-[#e2deff]">
                   {[
                     { label: 'Уведомления по SMS', desc: 'Получать SMS о новых заказах' },
@@ -273,23 +272,22 @@ export default function Dashboard() {
                     { label: 'Показывать профиль в поиске', desc: 'Другие пользователи могут найти вас' },
                     { label: 'Двухфакторная аутентификация', desc: 'Дополнительная защита аккаунта' },
                   ].map((s, i) => (
-                    <div key={i} className="flex items-center justify-between px-6 py-4">
+                    <div key={i} className="flex items-center justify-between px-5 py-4 gap-4">
                       <div>
                         <div className="font-medium text-sm">{s.label}</div>
                         <div className="text-xs text-[#6b64a0] mt-0.5">{s.desc}</div>
                       </div>
                       <div
-                        className="w-11 h-6 bg-primary rounded-full cursor-pointer relative"
+                        className="w-11 h-6 bg-primary rounded-full cursor-pointer relative shrink-0"
                         onClick={e => e.currentTarget.classList.toggle('bg-[#e2deff]')}
                       >
-                        <div className="w-4 h-4 bg-white rounded-full absolute top-1 right-1 transition-all" />
+                        <div className="w-4 h-4 bg-white rounded-full absolute top-1 right-1" />
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
-
           </div>
         </div>
       </div>

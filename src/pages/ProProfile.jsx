@@ -25,76 +25,63 @@ export default function ProProfile() {
     <div className="min-h-screen bg-[#f4f3ff]">
       <Navbar />
 
-      <div className="max-w-6xl mx-auto px-6 pt-28 pb-16">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 pt-24 md:pt-28 pb-16">
 
-        {/* BACK */}
         <button
           onClick={() => navigate('/search')}
-          className="flex items-center gap-2 text-[#6b64a0] hover:text-primary transition-colors mb-6 font-medium text-sm"
+          className="flex items-center gap-2 text-[#6b64a0] hover:text-primary transition-colors mb-5 font-medium text-sm"
         >
           <ChevronLeft size={18} /> Назад к результатам
         </button>
 
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-5">
 
           {/* LEFT */}
-          <div className="lg:col-span-2 flex flex-col gap-6">
+          <div className="lg:col-span-2 flex flex-col gap-5">
 
             {/* PROFILE CARD */}
-            <div className="bg-white rounded-2xl border border-[#e2deff] p-8">
-              <div className="flex gap-6">
-                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary-light to-primary-dark flex items-center justify-center text-5xl shrink-0">
+            <div className="bg-white rounded-2xl border border-[#e2deff] p-5 md:p-8">
+              <div className="flex gap-4 md:gap-6">
+                <div className="w-16 h-16 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-primary-light to-primary-dark flex items-center justify-center text-3xl md:text-5xl shrink-0">
                   {pro.avatar}
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-start justify-between">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-2 flex-wrap">
                     <div>
-                      <h1 className="font-syne text-2xl font-extrabold">{pro.name}</h1>
-                      <div className="text-primary font-semibold mt-1">{pro.job}</div>
+                      <h1 className="font-syne text-xl md:text-2xl font-extrabold">{pro.name}</h1>
+                      <div className="text-primary font-semibold mt-0.5 text-sm md:text-base">{pro.job}</div>
                     </div>
-                    <div className="flex items-center gap-1 bg-[#f4f3ff] border border-[#e2deff] rounded-xl px-3 py-1.5">
-                      <Star size={14} className="fill-accent text-accent" />
+                    <div className="flex items-center gap-1 bg-[#f4f3ff] border border-[#e2deff] rounded-xl px-3 py-1.5 shrink-0">
+                      <Star size={13} className="fill-accent text-accent" />
                       <span className="font-bold text-sm">{pro.rating}</span>
                     </div>
                   </div>
-
-                  <div className="flex flex-wrap gap-4 mt-4 text-sm text-[#6b64a0]">
-                    <div className="flex items-center gap-1.5">
-                      <MapPin size={14} /> Бишкек
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Star size={14} className="fill-accent text-accent" />
-                      {pro.reviews} отзывов
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Clock size={14} /> Отвечает за 1 час
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Shield size={14} className="text-green-500" />
-                      <span className="text-green-600 font-medium">Проверен</span>
-                    </div>
+                  <div className="flex flex-wrap gap-3 mt-3 text-xs text-[#6b64a0]">
+                    <span className="flex items-center gap-1"><MapPin size={12} /> Бишкек</span>
+                    <span className="flex items-center gap-1"><Star size={12} className="fill-accent text-accent" />{pro.reviews} отзывов</span>
+                    <span className="flex items-center gap-1"><Clock size={12} /> Отвечает за 1 час</span>
+                    <span className="flex items-center gap-1 text-green-600 font-medium"><Shield size={12} className="text-green-500" />Проверен</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* ABOUT */}
-            <div className="bg-white rounded-2xl border border-[#e2deff] p-8">
-              <h2 className="font-syne text-xl font-bold mb-4">О себе</h2>
-              <p className="text-[#6b64a0] leading-relaxed">
+            <div className="bg-white rounded-2xl border border-[#e2deff] p-5 md:p-8">
+              <h2 className="font-syne text-lg md:text-xl font-bold mb-4">О себе</h2>
+              <p className="text-[#6b64a0] leading-relaxed text-sm md:text-base">
                 Профессиональный {pro.job.toLowerCase()} с опытом работы более 5 лет.
                 Выполняю работу качественно и в срок. Всегда на связи, консультирую бесплатно.
                 Работаю по всему Бишкеку и пригороду. Гарантия на все виды работ.
               </p>
-
-              <div className="grid grid-cols-3 gap-4 mt-6">
+              <div className="grid grid-cols-3 gap-3 mt-5">
                 {[
                   { num: '5+', label: 'Лет опыта' },
                   { num: pro.reviews, label: 'Выполнено работ' },
                   { num: '100%', label: 'Гарантия' },
                 ].map(s => (
-                  <div key={s.label} className="bg-[#f4f3ff] rounded-xl p-4 text-center">
-                    <div className="font-syne text-2xl font-extrabold text-primary">{s.num}</div>
+                  <div key={s.label} className="bg-[#f4f3ff] rounded-xl p-3 md:p-4 text-center">
+                    <div className="font-syne text-xl md:text-2xl font-extrabold text-primary">{s.num}</div>
                     <div className="text-xs text-[#6b64a0] mt-1">{s.label}</div>
                   </div>
                 ))}
@@ -102,9 +89,9 @@ export default function ProProfile() {
             </div>
 
             {/* SERVICES */}
-            <div className="bg-white rounded-2xl border border-[#e2deff] p-8">
-              <h2 className="font-syne text-xl font-bold mb-4">Услуги и цены</h2>
-              <div className="flex flex-col gap-3">
+            <div className="bg-white rounded-2xl border border-[#e2deff] p-5 md:p-8">
+              <h2 className="font-syne text-lg md:text-xl font-bold mb-4">Услуги и цены</h2>
+              <div className="flex flex-col gap-1">
                 {[
                   { name: 'Базовая консультация', price: '500 сом', time: '30 мин' },
                   { name: 'Стандартная работа', price: '1 500 сом', time: '2–4 часа' },
@@ -116,36 +103,34 @@ export default function ProProfile() {
                       <div className="font-medium text-sm">{s.name}</div>
                       <div className="text-xs text-[#6b64a0] mt-0.5">{s.time}</div>
                     </div>
-                    <div className="font-syne font-bold text-primary">{s.price}</div>
+                    <div className="font-syne font-bold text-primary text-sm">{s.price}</div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* REVIEWS */}
-            <div className="bg-white rounded-2xl border border-[#e2deff] p-8">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-syne text-xl font-bold">Отзывы</h2>
-                <div className="flex items-center gap-2">
-                  <Star size={16} className="fill-accent text-accent" />
-                  <span className="font-bold">{pro.rating}</span>
-                  <span className="text-[#6b64a0] text-sm">({pro.reviews} отзывов)</span>
+            <div className="bg-white rounded-2xl border border-[#e2deff] p-5 md:p-8">
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="font-syne text-lg md:text-xl font-bold">Отзывы</h2>
+                <div className="flex items-center gap-1.5">
+                  <Star size={15} className="fill-accent text-accent" />
+                  <span className="font-bold text-sm">{pro.rating}</span>
+                  <span className="text-[#6b64a0] text-xs">({pro.reviews})</span>
                 </div>
               </div>
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-4">
                 {reviews.map(r => (
-                  <div key={r.id} className="pb-5 border-b border-[#e2deff] last:border-0 last:pb-0">
+                  <div key={r.id} className="pb-4 border-b border-[#e2deff] last:border-0 last:pb-0">
                     <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-[#f4f3ff] flex items-center justify-center text-lg">
-                          {r.avatar}
-                        </div>
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-full bg-[#f4f3ff] flex items-center justify-center text-base">{r.avatar}</div>
                         <div>
                           <div className="font-semibold text-sm">{r.name}</div>
                           <div className="text-xs text-[#6b64a0]">{r.date}</div>
                         </div>
                       </div>
-                      <div className="text-accent text-sm">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</div>
+                      <div className="text-accent text-xs">{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</div>
                     </div>
                     <p className="text-sm text-[#6b64a0] leading-relaxed">{r.text}</p>
                   </div>
@@ -156,11 +141,11 @@ export default function ProProfile() {
 
           {/* RIGHT — BOOKING */}
           <div className="flex flex-col gap-4">
-            <div className="bg-white rounded-2xl border border-[#e2deff] p-6 sticky top-24">
-              <div className="font-syne text-2xl font-extrabold text-primary mb-1">{pro.price}</div>
-              <div className="text-xs text-[#6b64a0] mb-6">Стоимость зависит от объёма работ</div>
+            <div className="bg-white rounded-2xl border border-[#e2deff] p-5 md:p-6 lg:sticky lg:top-24">
+              <div className="font-syne text-xl md:text-2xl font-extrabold text-primary mb-1">{pro.price}</div>
+              <div className="text-xs text-[#6b64a0] mb-5">Стоимость зависит от объёма работ</div>
 
-              <div className="flex flex-col gap-3 mb-6">
+              <div className="flex flex-col gap-3 mb-5">
                 <div>
                   <label className="text-xs font-bold mb-1.5 block">Описание задачи</label>
                   <textarea
@@ -178,26 +163,25 @@ export default function ProProfile() {
                 </div>
               </div>
 
-              <button className="w-full py-4 bg-primary text-white rounded-xl font-syne font-bold hover:bg-primary-light transition-all hover:shadow-lg hover:shadow-primary/30 mb-3">
+              <button className="w-full py-3.5 bg-primary text-white rounded-xl font-syne font-bold hover:bg-primary-light transition-all hover:shadow-lg hover:shadow-primary/30 mb-3">
                 Отправить заявку
               </button>
 
-              <div className="grid grid-cols-2 gap-3">
-                <button className="flex items-center justify-center gap-2 py-3 border-2 border-[#e2deff] rounded-xl text-sm font-semibold text-[#6b64a0] hover:border-primary hover:text-primary transition-all">
-                  <Phone size={15} /> Позвонить
+              <div className="grid grid-cols-2 gap-2">
+                <button className="flex items-center justify-center gap-1.5 py-2.5 border-2 border-[#e2deff] rounded-xl text-xs font-semibold text-[#6b64a0] hover:border-primary hover:text-primary transition-all">
+                  <Phone size={14} /> Позвонить
                 </button>
-                <button className="flex items-center justify-center gap-2 py-3 border-2 border-[#e2deff] rounded-xl text-sm font-semibold text-[#6b64a0] hover:border-primary hover:text-primary transition-all">
-                  <MessageCircle size={15} /> Написать
+                <button className="flex items-center justify-center gap-1.5 py-2.5 border-2 border-[#e2deff] rounded-xl text-xs font-semibold text-[#6b64a0] hover:border-primary hover:text-primary transition-all">
+                  <MessageCircle size={14} /> Написать
                 </button>
               </div>
 
-              <div className="mt-4 flex items-center gap-2 text-xs text-[#6b64a0] bg-[#f4f3ff] rounded-xl p-3">
-                <Shield size={14} className="text-green-500 shrink-0" />
+              <div className="mt-4 flex items-start gap-2 text-xs text-[#6b64a0] bg-[#f4f3ff] rounded-xl p-3">
+                <Shield size={13} className="text-green-500 shrink-0 mt-0.5" />
                 Безопасная сделка — оплата только после выполнения работы
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
